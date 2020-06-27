@@ -1,52 +1,41 @@
-import React from 'react';
-import { useState } from 'react';
-import Books from './Books';
+import React, { useState } from 'react';
 import './App.css';
+import Contact from './contact';
 
 function App() {
-  const [numberOfBooks, setnumberOfBooks] = useState(0);
-  const [currentBook, setCurrentBook] = useState('');
-  const [listBooks, setListBooks] = useState([]);
 
-  const incrementBooks = () => {
-    setnumberOfBooks(numberOfBooks + 1);
+  const [listContact,setListContact] = useState([]);
+  const [nom,setNom] = useState('');
+  const [phone,setPhone] = useState('');
+
+
+  const addButtonClicked = () => {
+    setListContact([...listContact,{nom:nom,phone:phone}]);
   };
 
-  const deleteLastBook = () => {
-    setListBooks(listBooks.slice(0, listBooks.length - 1));
+  const nomChanged = (e) => {
+    setNom(e.target.value);
   };
-
-  const addBook = () => {
-    // 39lo 3lih mzyan: normalement khassna nssifto tableau machi string
-    setListBooks([...listBooks, currentBook]);
+  
+  const phoneChanged = (e) => {
+    setPhone(e.target.value);
   };
-
-  const textChanged = (e) => {
-    setCurrentBook(e.target.value);
+  
+  const deleteContact = (p) => {
+    const temptable = listContact.filter( c => c.phone != p);
+    setListContact(temptable);
   };
 
   return (
     <>
-      <div className='maindiv'>
-        <span>number of books: {numberOfBooks} </span>
-        <br />
-        <button onClick={incrementBooks}>Incrementer</button>
-
-        <button onClick={deleteLastBook}>Supprimer</button>
-        <br />
-        <br />
-        <input
-          type='textfield'
-          placeholder='rich dad poor dad'
-          onChange={textChanged}
-        />
-        <button onClick={addBook}>Ajouter</button>
-
-        {listBooks.map((item) => {
-          return <Books bookname={item} />;
-        })}
-      </div>
+    <input type='text' placeholder='nom' onChange={nomChanged}/>
+    <input type='text' placeholder='phone number' onChange={phoneChanged} />
+    <button onClick={addButtonClicked}> Ajouter</button>
+    {listContact.map((e)=>{
+      return (<Contact deleteContact={deleteContact} nom={e.nom} phone={e.phone} />);
+    })}
     </>
+
   );
 }
 
